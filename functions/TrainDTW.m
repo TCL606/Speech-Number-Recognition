@@ -1,7 +1,9 @@
-function cut_points = TrainDTW(features, count)
+function [cut_points, cluster_vecs] = TrainDTW(features, count)
     % features: (dim, T)
     % count: num of templates
+    % 
     % cut_points: (1, count + 1), which is [1, ..., T]
+    % cluster_vecs: (dim, count)
     
     sz = size(features);
     dim = sz(1);
@@ -19,16 +21,16 @@ function cut_points = TrainDTW(features, count)
     last_cut_points(end) = len;
 
     cluster_vecs = zeros(dim, count);
-    while sum(abs(cut_points - last_cut_points)) > 0
+    while sum(abs(cut_points - last_cut_points)) > 1
         for i = 1: 1: count - 1
             last_cut_points(i + 1) = cut_points(i + 1);
         end
         
         for i = 1: 1: count
-            cluster_vecs(i) = sum(features(:, cut_points(i): cut_points(i + 1))) / (cut_points(i + 1) - cut_points(i) + 1);
+            cluster_vecs(:, i) = sum(features(:, cut_points(i): cut_points(i + 1)), 2) / (cut_points(i + 1) - cut_points(i) + 1);
         end
         
-        cut_points(1: end - 1) = DTW(features, cluster_vecs);
+        [cut_points(1: end - 1), ~] = DTW(features, cluster_vecs);
     end
 end
 

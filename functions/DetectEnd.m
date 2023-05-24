@@ -1,6 +1,6 @@
 function final_end = DetectEnd(start, frame_energy, cross_thre_rate, noise_power, frame_len, snr_end)
     if (nargin < 6)
-        snr_end = 5;
+        snr_end = 1;
     end
     thre_end = [];
     hold_len = 5;

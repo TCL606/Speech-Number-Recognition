@@ -13,12 +13,12 @@ function MFCCs = CalMFCC(signal, n_fft, hop_size, n_mfcc, n_mel, fs)
     signal = filter([1 - pre_emphasis], 1, signal);
 
     % Framing and windowing:
-    frames = buffer(signal, n_fft, n_fft - hop_size, 'nodelay');
+    frames = buffer(signal, n_fft, n_fft - hop_size);
     frames = frames .* hamming(n_fft);
 
     % FFT and power spectrum:
     spec = fft(frames, n_fft, 1);
-    spec_power = 1.0 / n_fft * abs(spec).^2;
+    spec_power = 1.0 ./ (n_fft * abs(spec).^2 + 1e-8);
     
     % Mel filter bank
     mfb = GetMelFilterBank(n_mel, n_fft, fs);

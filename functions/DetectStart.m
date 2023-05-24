@@ -1,6 +1,6 @@
 function start = DetectStart(frame_energy, cross_thre_rate, noise_power, frame_len, snr_start)
     if (nargin < 5)
-        snr_start = 85;
+        snr_start = 1;
     end
     energy_start = [];
     i = 2;

@@ -1,7 +1,7 @@
 function [cross_zero_rate, cross_thre_rate, frame_energy] = AnalyzeSpeech(wav_del_dc, frame_time, frame_shift_time, Fs, noise_power, snr)
     % time: ms; Fs: Hz
     if (nargin < 6)
-        snr = 90;
+        snr = 1;
     end
     wav_len = length(wav_del_dc);
     frame_len = frame_time / 1000 * Fs;

@@ -1,4 +1,4 @@
-function signal = Record(Fs, nBits, nChannel, time, filename, cover)
+function signal = RecordWav(Fs, nBits, nChannel, time, filename, cover)
     if (nargin < 6)
         cover = 0;
     end
