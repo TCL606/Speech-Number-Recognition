@@ -21,7 +21,7 @@ function [cut_points, cluster_vecs] = TrainDTW(features, count)
     last_cut_points(end) = len;
 
     cluster_vecs = zeros(dim, count);
-    while sum(abs(cut_points - last_cut_points)) > 1
+    while sum(abs(cut_points - last_cut_points)) > 0
         for i = 1: 1: count - 1
             last_cut_points(i + 1) = cut_points(i + 1);
         end
