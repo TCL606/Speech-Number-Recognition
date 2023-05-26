@@ -4,9 +4,10 @@ function final_end = DetectEnd(start, frame_energy, cross_thre_rate, noise_power
     end
     thre_end = [];
     hold_len = 5;
+    least_len = 1;
     for i = start
-        for j = i + 1: 1: length(cross_thre_rate) - hold_len
-            if cross_thre_rate(j: j + hold_len) == 0
+        for j = i + least_len: 1: length(cross_thre_rate) - hold_len
+            if all(cross_thre_rate(j: j + hold_len) == 0)
                 thre_end = [thre_end, j];
                 break
             end
@@ -14,7 +15,7 @@ function final_end = DetectEnd(start, frame_energy, cross_thre_rate, noise_power
     end
     energy_end = [];
     for k = start
-        i = k;
+        i = k + least_len - 1;
         while i < length(frame_energy) - hold_len
             if  frame_energy(i) > snr_end * noise_power * frame_len && sum(frame_energy(i + 1: i + hold_len) < snr_end * noise_power * frame_len) == hold_len
                 energy_end = [energy_end, i + 1];

@@ -172,8 +172,7 @@ function recordButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global isRunning signal
-global mfcc_win_len mfcc_shift_len n_mfcc n_mel template_num mfcc_templates pre_len frame_time frame_shift_time snr Fs
-
+global mfcc_win_len mfcc_shift_len n_mfcc n_mel template_num mfcc_templates pre_len frame_time frame_shift_time snr Fs start_len
 if isRunning == 0
     isRunning = 1;
     try
@@ -192,13 +191,13 @@ if isRunning == 0
             return
         end
         set(handles.logText, 'String', 'Preparing for recording ...');
-        pause(1);
         recObj = audiorecorder(Fs, nBits, nChannel);
-        set(handles.logText, 'String', 'Start speaking ...');
         pause(1);
+        set(handles.logText, 'String', 'Start speaking ...');
         recordblocking(recObj, time);
         set(handles.logText, 'String', 'End of recording');
         signal = getaudiodata(recObj);
+        signal = signal(start_len + 1: end);
         set(handles.logText, 'String', 'Waiting for recording ...');
         axes(handles.plotAxes);
         plot(signal);
@@ -245,23 +244,27 @@ function plotAxes_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: place code in OpeningFcn to populate plotAxes
-global mfcc_win_len mfcc_shift_len n_mfcc n_mel template_num mfcc_templates pre_len frame_time frame_shift_time snr Fs
+addpath("../functions");
+global mfcc_win_len mfcc_shift_len n_mfcc n_mel template_num mfcc_templates pre_len frame_time frame_shift_time snr Fs start_len
 mfcc_win_len = 320;
 mfcc_shift_len = 160;
-n_mfcc = 19;
+n_mfcc = 23;
 n_mel = 30;
 template_num = 5;
 mfcc_templates = zeros(10, n_mfcc, template_num);
-pre_len = round(0.5 * Fs);
+pre_len = round(0.2 * Fs);
 frame_time = 20; % ms
 frame_shift_time = 10; % ms
-snr = 3;
+snr = 5;
 Fs = 16000;
+start_len = round(0.3 * Fs);
 pre_len = round(0.5 * Fs);
-signals = zeros(10, 2 * Fs);
+rec_time = 2.5;
+signals = zeros(10, round(rec_time * Fs) - start_len);
 path = "E:\清华\大三春\语音信号处理\SpeechAnalysis\resource\";
 for i = 0: 1: 9 
-    [signals(i + 1, :), Fs] = audioread(strcat(path, num2str(i), ".wav"));
+    [wav, Fs] = audioread(strcat(path, num2str(i), ".wav"));
+    signals(i + 1, :) = wav(start_len + 1: end);
 end
 for i = 0: 1: 9
     noise = signals(i + 1, 1: pre_len);
@@ -298,13 +301,14 @@ function readWavButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global isRunning signal
-global mfcc_win_len mfcc_shift_len n_mfcc n_mel template_num mfcc_templates pre_len frame_time frame_shift_time snr Fs
+global mfcc_win_len mfcc_shift_len n_mfcc n_mel template_num mfcc_templates pre_len frame_time frame_shift_time snr Fs start_len
 
 if isRunning == 0
     isRunning = 1;
     try
         set(handles.regResult, 'String', '');
         [signal, Fs] = audioread(handles.wavFilename.String);
+        signal = signal(start_len + 1: end);
         set(handles.logText, 'String', 'Succesfully read audio.');
         axes(handles.plotAxes);
         plot(signal);

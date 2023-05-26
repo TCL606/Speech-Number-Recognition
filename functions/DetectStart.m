@@ -4,11 +4,12 @@ function start = DetectStart(frame_energy, cross_thre_rate, noise_power, frame_l
     end
     energy_start = [];
     i = 2;
-    noise_energy = snr_start * noise_power * frame_len;
+    noise_energy_snr = snr_start * noise_power * frame_len;
+    noise_energy = noise_power * frame_len;
     while i < length(frame_energy)
-        if  frame_energy(i) - frame_energy(i - 1) > noise_energy
+        if  frame_energy(i) - frame_energy(i - 1) > noise_energy_snr && frame_energy(i - 1) <= noise_energy
             energy_start = [energy_start, i - 1];
-            i = i + 25;
+            i = i + 10;
             continue
         end
         i = i + 1;
