@@ -2,3 +2,5 @@
 *.pdf
 *.md
 !README.md
+*.zip
+*.rar
