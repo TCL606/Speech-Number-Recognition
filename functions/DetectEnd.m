@@ -4,15 +4,15 @@ function final_end = DetectEnd(start, frame_energy, cross_thre_rate, noise_power
     end
     thre_end = [];
     hold_len = 5;
-    least_len = 1;
-    for i = start
-        for j = i + least_len: 1: length(cross_thre_rate) - hold_len
-            if all(cross_thre_rate(j: j + hold_len) == 0)
-                thre_end = [thre_end, j];
-                break
-            end
-        end
-    end
+    least_len = 10;
+%     for i = start
+%         for j = i + least_len: 1: length(cross_thre_rate) - hold_len
+%             if all(cross_thre_rate(j: j + hold_len) == 0) && cross_thre_rate(j - 1) ~= 0
+%                 thre_end = [thre_end, j];
+%                 break
+%             end
+%         end
+%     end
     energy_end = [];
     for k = start
         i = k + least_len - 1;

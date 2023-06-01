@@ -203,7 +203,8 @@ if isRunning == 0
         plot(signal);
         set(gca,'XTickLabel',[]); 
         set(gca,'YTickLabel',[]);
-
+        
+        signal = signal - mean(signal);
         noise = signal(1: pre_len);
         noise_power = sum(noise .^ 2) / length(noise);
         wav = signal(pre_len + 1: end);
@@ -248,14 +249,14 @@ addpath("../functions");
 global mfcc_win_len mfcc_shift_len n_mfcc n_mel template_num mfcc_templates pre_len frame_time frame_shift_time snr Fs start_len
 mfcc_win_len = 320;
 mfcc_shift_len = 160;
-n_mfcc = 23;
-n_mel = 30;
+n_mfcc = 18;
+n_mel = 40;
 template_num = 5;
 mfcc_templates = zeros(10, n_mfcc, template_num);
 pre_len = round(0.2 * Fs);
 frame_time = 20; % ms
 frame_shift_time = 10; % ms
-snr = 5;
+snr = 6;
 Fs = 16000;
 start_len = round(0.3 * Fs);
 pre_len = round(0.5 * Fs);
@@ -267,6 +268,7 @@ for i = 0: 1: 9
     signals(i + 1, :) = wav(start_len + 1: end);
 end
 for i = 0: 1: 9
+    signals(i + 1, :) = signals(i + 1, :) - mean(signals(i + 1, :));
     noise = signals(i + 1, 1: pre_len);
     noise_power = sum(noise .^ 2) / length(noise);
     wav = signals(i + 1, pre_len + 1: end); 
@@ -314,6 +316,7 @@ if isRunning == 0
         plot(signal);
         set(gca,'XTickLabel',[]); 
         set(gca,'YTickLabel',[]);
+        signal = signal - mean(signal);
         noise = signal(1: pre_len);
         noise_power = sum(noise .^ 2) / length(noise);
         wav = signal(pre_len + 1: end);

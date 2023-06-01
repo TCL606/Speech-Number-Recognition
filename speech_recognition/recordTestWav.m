@@ -7,4 +7,4 @@ nBits = 16;
 nChannel = 1;
 disp("Preparing for recording ...");
 pause(1);
-RecordWav(Fs, nBits, nChannel, rec_time, strcat(path, "5.wav"), 1);
+RecordWav(Fs, nBits, nChannel, rec_time, strcat(path, "1.wav"), 1);

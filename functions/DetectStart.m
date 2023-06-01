@@ -9,8 +9,8 @@ function start = DetectStart(frame_energy, cross_thre_rate, noise_power, frame_l
     noise_energy_snr = snr_start * noise_power * frame_len;
     noise_energy = noise_power * frame_len;
     while i < length(frame_energy)
-        if  frame_energy(i) - frame_energy(i - 1) > noise_energy_snr && ...
-                sum(frame_energy(i - hold_len: i - 1) <= noise_energy) == hold_len
+        if  frame_energy(i) > noise_energy_snr && ...
+                sum(frame_energy(i - hold_len: i - 1) <= noise_energy_snr) >= hold_len
             energy_start = [energy_start, i - 1];
             i = i + 10;
             continue
@@ -30,7 +30,7 @@ function start = DetectStart(frame_energy, cross_thre_rate, noise_power, frame_l
     temp_start = ArrayMerge(thre_start, energy_start);
     start = [temp_start(1)];
     for i = 2: 1: length(temp_start)
-        if temp_start(i) - temp_start(i - 1) > 20
+        if temp_start(i) - temp_start(i - 1) > 12
             start = [start, temp_start(i)];
         end
     end
