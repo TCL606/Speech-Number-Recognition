@@ -6,9 +6,9 @@ start_len = round(0.3 * Fs);
 signals = zeros(10, round(rec_time * Fs) - start_len);
 pre_len = round(0.2 * Fs);
 path = "E:\清华\大三春\语音信号处理\SpeechAnalysis\resource\";
-cover = 1;
+cover = 0;
 num = 0: 1: 9;
-is_plot = 1;
+is_plot = 0;
 record = 0;
 
 if record == 1
@@ -35,15 +35,15 @@ end
 
 mfcc_win_len = 320;
 mfcc_shift_len = 160;
-n_mfcc = 23;
-n_mel = 30;
+n_mfcc = 18;
+n_mel = 40;
 template_num = 5;
 mfcc_templates = zeros(10, n_mfcc, template_num);
 frame_time = 20; % ms
 frame_shift_time = 10; % ms
 frame_len = frame_time / 1000 * Fs;
 frame_shift_len = frame_shift_time / 1000 * Fs;
-snr = 5;
+snr = 6;
 
 for i = num
     noise = signals(i + 1, 1: pre_len);
@@ -71,7 +71,7 @@ for i = num
     end
 end
 
-[test_audio, ~] = audioread("../resource/test_265.wav");
+[test_audio, ~] = audioread("../resource/test_17.wav");
 test_audio = test_audio(start_len + 1: end);
 noise = test_audio(1: pre_len);
 noise_power = sum(noise .^ 2) / length(noise);
