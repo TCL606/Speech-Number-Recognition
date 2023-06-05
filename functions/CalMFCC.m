@@ -18,7 +18,7 @@ function MFCCs = CalMFCC(signal, n_fft, hop_size, n_mfcc, n_mel, fs)
 
     % FFT and power spectrum:
     spec = fft(frames, n_fft, 1);
-    spec_power = 1.0 ./ (n_fft * abs(spec).^2 + 1e-8);
+    spec_power = abs(spec).^2;
     
     % Mel filter bank
     mfb = GetMelFilterBank(n_mel, n_fft, fs);
